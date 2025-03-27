@@ -1,0 +1,34 @@
+@page "/event-list"
+@using EventRegistrationApp.Models
+@using EventRegistrationApp.Services
+@inject EventService EventService
+
+<h3>Registered Events</h3>
+
+@* Initialize the events variable to ensure it's not null *@
+@code {
+    private IReadOnlyList<Event> events = Array.Empty<Event>();
+
+    protected override void OnInitialized()
+    {
+        events = EventService.GetEvents() ?? Array.Empty<Event>(); // Default to empty array if null
+    }
+}
+
+@if (events.Count == 0)
+{
+    <p>No events registered yet.</p>
+}
+else
+{
+    <ul>
+        @foreach (var eventItem in events)
+        {
+            <li>@eventItem.Name - @(eventItem.Date?.ToShortDateString() ?? "N/A") - @eventItem.Location</li>
+        }
+    </ul>
+}
+
+@code {
+    // Removed duplicate declaration of events
+}
